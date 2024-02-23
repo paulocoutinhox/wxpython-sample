@@ -23,7 +23,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up system dependencies
-        run: sudo apt-get install libwxgtk2.8-dev libwxgtk2.8-dbg
+        run: |
+          sudo apt-get update -q && sudo apt-get install
+          sudo apt-get install python-wxgtk3.0
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
