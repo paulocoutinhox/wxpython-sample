@@ -22,6 +22,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up system dependencies
+        uses: ConorMacBride/install-package@v1
+        with:
+          apt: python-wxgtk2.8
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
