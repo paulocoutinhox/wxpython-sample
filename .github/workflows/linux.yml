@@ -25,7 +25,7 @@ jobs:
       - name: Set up system dependencies
         run: |
           sudo apt-get update -q && sudo apt-get install
-          sudo apt install python3-wxgtk3.0
+          sudo apt install libgtk-3-dev
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
