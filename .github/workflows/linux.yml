@@ -23,9 +23,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up system dependencies
-        uses: ConorMacBride/install-package@v1
-        with:
-          apt: python-wxgtk2.8
+        run: sudo apt-get install libwxgtk2.8-dev libwxgtk2.8-dbg
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
