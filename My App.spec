@@ -34,12 +34,8 @@ a = Analysis(
         root_dir,
     ],
     binaries=[],
-    datas=[
-
-    ],
-    hiddenimports=[
-
-    ],
+    datas=[],
+    hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
     excludes=[],
