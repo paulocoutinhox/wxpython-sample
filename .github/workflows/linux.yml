@@ -1,0 +1,60 @@
+name: Linux
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'extras/images/**'
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - { name: "Ubuntu Latest GCC", os: ubuntu-latest, target: "linux" }
+        python-version: [3.9]
+        python-architecture: ["x64"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.python-architecture }}
+
+      - name: Upgrade PIP
+        run: python3 -m pip install --upgrade pip setuptools wheel
+
+      - name: Display Python version
+        run: python3 --version
+
+      - name: Display PIP version
+        run: python3 -m pip --version
+
+      - name: Install python dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Build
+        run: pyinstaller "My App.spec"
+
+      - name: Pack
+        run: python3 -m tarfile -c ${{ matrix.config.target }}-${{ matrix.python-architecture }}.tar.gz dist/
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact-${{ matrix.config.target }}-${{ matrix.python-architecture }}.tar.gz
+          path: ${{ matrix.config.target }}-${{ matrix.python-architecture }}.tar.gz
+
+      - name: Release
+        id: upload-release-asset
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ matrix.config.target }}-${{ matrix.python-architecture }}.tar.gz
